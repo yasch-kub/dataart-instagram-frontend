@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import {
 	Divider,
     Card,
@@ -7,9 +7,11 @@ import {
 	CardMedia,
 	CardText,
 	IconButton,
-	TextField
 } from 'material-ui';
 import './style.sass';
+
+import PictureCommentsForm from '../PictureCommentsForm';
+import PictureCommentsBox from '../PictureCommentsBox';
 
 export default class PictureBox extends Component {
 
@@ -17,7 +19,10 @@ export default class PictureBox extends Component {
 		avatar: PropTypes.string.isRequired,
 		user: PropTypes.string.isRequired,
 		location: PropTypes.string.isRequired,
+		signature: PropTypes.string.isRequired,
 		isLiked: PropTypes.bool.isRequired,
+
+		addComment: PropTypes.func.isRequired
 	};
 
 	dividerStyle = {
@@ -30,10 +35,10 @@ export default class PictureBox extends Component {
 		height: 30
 	};
 
-	likeButtonIcon = this.props.isLiked ? 'favorite' : 'favorite_border';
-	likeButtonTooltip = this.props.isLiked ? 'Unlike' : 'Like';
-
 	render() {
+		let likeButtonIcon = this.props.isLiked ? 'favorite' : 'favorite_border';
+		let likeButtonTooltip = this.props.isLiked ? 'Unlike' : 'Like';
+
         return(
             <Card className = "picturebox">
                 <CardHeader
@@ -48,21 +53,19 @@ export default class PictureBox extends Component {
 					<span className = "picturebox_user">
 						{this.props.user}
 					</span>
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, optio.
+					{this.props.signature}
+					<PictureCommentsBox comments = {this.props.comments}/>
 				</CardText>
 				<Divider style = {this.dividerStyle}/>
 				<CardActions>
 					<IconButton
-						tooltip = {this.likeButtonTooltip}
+						tooltip = {likeButtonTooltip}
 						iconClassName = "material-icons picturebox_button"
+						onClick = {this.props.toggleLike}
 					>
-						{this.likeButtonIcon}
+						{likeButtonIcon}
 					</IconButton>
-					<TextField
-						hintText = "Add comment..."
-						floatingLabelText = "Comment"
-						floatingLabelFixed = {true}
-					/>
+					<PictureCommentsForm addComment = {this.props.addComment}/>
 				</CardActions>
             </Card>
         )
